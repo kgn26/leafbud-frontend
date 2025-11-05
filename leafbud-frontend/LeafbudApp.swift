@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct leafbud_frontendApp: App {
+struct LeafbudApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
