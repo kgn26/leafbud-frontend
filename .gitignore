@@ -1,0 +1,30 @@
+# Xcode
+DerivedData/
+build/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata
+*.xccheckout
+*.moved-aside
+*.xcuserdatad
+.idea/
+
+# Swift Package Manager
+.build/
+Packages/
+
+# Environment / Secrets
+Secrets.xcconfig
+.env
+*.plist
+*.pem
+*.p12
+
+# macOS system
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Other
+*.swp
+*.lock
