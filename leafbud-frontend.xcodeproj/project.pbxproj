@@ -6,6 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		84052E932EBBFD01007D1495 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E922EBBFD01007D1495 /* Auth */; };
+		84052E952EBBFD01007D1495 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E942EBBFD01007D1495 /* Functions */; };
+		84052E972EBBFD01007D1495 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E962EBBFD01007D1495 /* PostgREST */; };
+		84052E992EBBFD01007D1495 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E982EBBFD01007D1495 /* Realtime */; };
+		84052E9B2EBBFD01007D1495 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E9A2EBBFD01007D1495 /* Storage */; };
+		84052E9E2EBBFEA5007D1495 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E9D2EBBFEA5007D1495 /* Supabase */; };
+		84052EA12EBC0020007D1495 /* secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */; };
+		84FE5BEA2EBE8CFA00A78864 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 84FE5BE92EBE8CFA00A78864 /* GoogleSignIn */; };
+		84FE5BEC2EBE8CFA00A78864 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 84FE5BEB2EBE8CFA00A78864 /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		84052E6F2EBBEE52007D1495 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,11 +39,25 @@
 		84052E5F2EBBEE50007D1495 /* leafbud-frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "leafbud-frontend.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84052E6E2EBBEE52007D1495 /* leafbud-frontendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "leafbud-frontendTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84052E782EBBEE52007D1495 /* leafbud-frontendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "leafbud-frontendUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		84052E9F2EBC0016007D1495 /* secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		84052EA52EBD5118007D1495 /* Exceptions for "leafbud-frontend" folder in "leafbud-frontend" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 84052E5E2EBBEE50007D1495 /* leafbud-frontend */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		84052E612EBBEE50007D1495 /* leafbud-frontend */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				84052EA52EBD5118007D1495 /* Exceptions for "leafbud-frontend" folder in "leafbud-frontend" target */,
+			);
 			path = "leafbud-frontend";
 			sourceTree = "<group>";
 		};
@@ -52,6 +78,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84052E972EBBFD01007D1495 /* PostgREST in Frameworks */,
+				84052E952EBBFD01007D1495 /* Functions in Frameworks */,
+				84052E9E2EBBFEA5007D1495 /* Supabase in Frameworks */,
+				84FE5BEC2EBE8CFA00A78864 /* GoogleSignInSwift in Frameworks */,
+				84052E932EBBFD01007D1495 /* Auth in Frameworks */,
+				84052E9B2EBBFD01007D1495 /* Storage in Frameworks */,
+				84052E992EBBFD01007D1495 /* Realtime in Frameworks */,
+				84FE5BEA2EBE8CFA00A78864 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +112,9 @@
 				84052E612EBBEE50007D1495 /* leafbud-frontend */,
 				84052E712EBBEE52007D1495 /* leafbud-frontendTests */,
 				84052E7B2EBBEE52007D1495 /* leafbud-frontendUITests */,
+				84052E9C2EBBFEA5007D1495 /* Frameworks */,
 				84052E602EBBEE50007D1495 /* Products */,
+				84052E9F2EBC0016007D1495 /* secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +126,13 @@
 				84052E782EBBEE52007D1495 /* leafbud-frontendUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		84052E9C2EBBFEA5007D1495 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +155,14 @@
 			);
 			name = "leafbud-frontend";
 			packageProductDependencies = (
+				84052E922EBBFD01007D1495 /* Auth */,
+				84052E942EBBFD01007D1495 /* Functions */,
+				84052E962EBBFD01007D1495 /* PostgREST */,
+				84052E982EBBFD01007D1495 /* Realtime */,
+				84052E9A2EBBFD01007D1495 /* Storage */,
+				84052E9D2EBBFEA5007D1495 /* Supabase */,
+				84FE5BE92EBE8CFA00A78864 /* GoogleSignIn */,
+				84FE5BEB2EBE8CFA00A78864 /* GoogleSignInSwift */,
 			);
 			productName = "leafbud-frontend";
 			productReference = 84052E5F2EBBEE50007D1495 /* leafbud-frontend.app */;
@@ -195,6 +246,10 @@
 			);
 			mainGroup = 84052E562EBBEE50007D1495;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				84FE5BE82EBE8CFA00A78864 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 84052E602EBBEE50007D1495 /* Products */;
 			projectDirPath = "";
@@ -212,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84052EA12EBC0020007D1495 /* secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +327,7 @@
 /* Begin XCBuildConfiguration section */
 		84052E802EBBEE52007D1495 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -334,6 +391,7 @@
 		};
 		84052E812EBBEE52007D1495 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -390,6 +448,7 @@
 		};
 		84052E832EBBEE52007D1495 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -397,6 +456,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "leafbud-frontend/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -422,6 +482,7 @@
 		};
 		84052E842EBBEE52007D1495 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -429,6 +490,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "leafbud-frontend/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -572,6 +634,68 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+		84FE5BE82EBE8CFA00A78864 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		84052E922EBBFD01007D1495 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		84052E942EBBFD01007D1495 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		84052E962EBBFD01007D1495 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		84052E982EBBFD01007D1495 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		84052E9A2EBBFD01007D1495 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		84052E9D2EBBFEA5007D1495 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84052E912EBBFD01007D1495 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		84FE5BE92EBE8CFA00A78864 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84FE5BE82EBE8CFA00A78864 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		84FE5BEB2EBE8CFA00A78864 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84FE5BE82EBE8CFA00A78864 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 84052E572EBBEE50007D1495 /* Project object */;
 }

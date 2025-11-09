@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct LeafbudApp: App {
+    var authvm = AuthViewModel()
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -29,5 +30,6 @@ struct LeafbudApp: App {
         }
         .modelContainer(sharedModelContainer)
         .environmentObject(PlantInstViewModel.shared)
+        .environmentObject(authvm)
     }
 }
