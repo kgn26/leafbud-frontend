@@ -28,5 +28,6 @@ struct LeafbudApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+        .environmentObject(PlantInstViewModel.shared)
     }
 }
