@@ -285,5 +285,5 @@ struct SignUpView: View {
 
 #Preview {
     AuthView()
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel.shared)
 }
