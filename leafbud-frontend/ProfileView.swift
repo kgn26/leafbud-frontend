@@ -84,6 +84,9 @@ struct InfoCard<Content: View>: View {
 struct ProfileView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     var nextWatering: String {
+        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+            return "Optional"
+        }
         let nextDue = plantInst.userPlant?.carePlan?["WATER"]?.dueIn ?? 0
         switch nextDue {
         case 1: return "Tomorrow"
@@ -93,17 +96,57 @@ struct ProfileView: View {
         default: return "in \(nextDue) days"
         }
     }
-    var nextRepot: Int {
-        return plantInst.userPlant?.carePlan?["REPOT"]?.dueIn ?? 0
+    var nextRepot: String {
+        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+            return "Optional"
+        }
+        let nextDue = plantInst.userPlant?.carePlan?["REPOT"]?.dueIn ?? 0
+        switch nextDue {
+        case 1: return "Tomorrow"
+        case 0: return "Today"
+        case -1: return "Yesterday"
+        case ...(-2): return "\(abs(nextDue)) days late"
+        default: return "in \(nextDue) days"
+        }
     }
-    var nextMisting: Int {
-        return plantInst.userPlant?.carePlan?["MIST"]?.dueIn ?? 0
+    var nextMisting: String {
+        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+            return "Optional"
+        }
+        let nextDue = plantInst.userPlant?.carePlan?["MIST"]?.dueIn ?? 0
+        switch nextDue {
+        case 1: return "Tomorrow"
+        case 0: return "Today"
+        case -1: return "Yesterday"
+        case ...(-2): return "\(abs(nextDue)) days late"
+        default: return "in \(nextDue) days"
+        }
     }
-    var nextPruning: Int {
-        return plantInst.userPlant?.carePlan?["PRUNE"]?.dueIn ?? 0
+    var nextPruning: String {
+        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+            return "Optional"
+        }
+        let nextDue = plantInst.userPlant?.carePlan?["PRUNE"]?.dueIn ?? 0
+        switch nextDue {
+        case 1: return "Tomorrow"
+        case 0: return "Today"
+        case -1: return "Yesterday"
+        case ...(-2): return "\(abs(nextDue)) days late"
+        default: return "in \(nextDue) days"
+        }
     }
-    var nextFertilizing: Int {
-        return plantInst.userPlant?.carePlan?["FERTILIZE"]?.dueIn ?? 0
+    var nextFertilizing: String {
+        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+            return "Optional"
+        }
+        let nextDue = plantInst.userPlant?.carePlan?["FERTILIZE"]?.dueIn ?? 0
+        switch nextDue {
+        case 1: return "Tomorrow"
+        case 0: return "Today"
+        case -1: return "Yesterday"
+        case ...(-2): return "\(abs(nextDue)) days late"
+        default: return "in \(nextDue) days"
+        }
     }
     
     var body: some View {
@@ -141,7 +184,7 @@ struct ProfileView: View {
                         HStack(spacing: 25) {
                             VerticalLabel(
                                 text: (Text("Next watering\n")
-                                       + Text("\(self.nextWatering)"))
+                                       + Text(self.nextWatering))
                                 .font(.caption),
                                 imageName: "waterIcon"
                             )
@@ -157,8 +200,8 @@ struct ProfileView: View {
                             
                             
                             VerticalLabel(
-                                text: (Text("Next ________\n")
-                                       + Text("in __ days"))
+                                text: (Text("Next misting\n")
+                                       + Text(self.nextMisting))
                                 .font(.caption),
                                 imageName: "waterIcon"
                             )
@@ -173,8 +216,8 @@ struct ProfileView: View {
                     ) {
                         HStack(spacing: 25) {
                             VerticalLabel(
-                                text: (Text("Next ________\n")
-                                       + Text("in __ days"))
+                                text: (Text("Next fertilizing\n")
+                                       + Text(self.nextFertilizing))
                                 .font(.caption),
                                 imageName: "soilIcon"
                             )
@@ -189,13 +232,20 @@ struct ProfileView: View {
                     ) {
                         HStack(spacing: 25) {
                             VerticalLabel(
-                                text: (Text("Next ________\n")
-                                       + Text("in __ days"))
+                                text: (Text("Next repotting\n")
+                                       + Text(self.nextRepot))
                                 .font(.caption),
                                 //                            .fontDesign(.serif),
                                 imageName: "soilIcon"
                             )
                             
+                            VerticalLabel(
+                                text: (Text("Next pruning\n")
+                                       + Text(self.nextPruning))
+                                .font(.caption),
+                                //                            .fontDesign(.serif),
+                                imageName: "soilIcon"
+                            )
                         }
                     }
                     

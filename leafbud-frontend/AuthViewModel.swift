@@ -13,36 +13,89 @@ import AuthenticationServices
 import GoogleSignInSwift
 
 class AuthViewModel: ObservableObject {
+    static let shared = AuthViewModel()
+    
+    private init() {
+        Task {
+            await MainActor.run { self.isLoading = true }
+            await restoreSession()
+            await MainActor.run { self.isLoading = false }
+        }
+    }
+    
     @Published var isAuthenticated: Bool = false
     @Published var isLoading = false
+    @Published var checkingSession = true
     @Published var showSignUp = false
     @Published var errMsg: String? = nil
     @Published var signedUp: Bool = false
-    @Published var user: User?
+    @Published var user: Auth.User?
     @Published var session: Session?
     
     private let client = SupabaseManager.shared.client
     
+    // MARK: Sign In
     func signIn(email: String, password: String) async {
-        isLoading = true
-        errMsg = nil
+        await MainActor.run {
+            self.isLoading = true
+            self.errMsg = nil
+        }
+        
         defer {
             Task { await MainActor.run { self.isLoading = false } }
         }
         
         do {
             let session = try await client.auth.signIn(email: email, password: password)
-            self.session = session
-            self.user = session.user
-            await MainActor.run { self.isAuthenticated = true }
+            await MainActor.run {
+                self.session = session
+                self.user = session.user
+                self.isAuthenticated = true
+            }
+            
+            // Save to Keychain
+            KeychainManager.save(session.accessToken, for: "accessToken")
+            KeychainManager.save(session.refreshToken, for: "refreshToken")
+            print("✅ Signed in and saved tokens")
         } catch {
             await MainActor.run { self.errMsg = error.localizedDescription }
         }
     }
     
+    // MARK: - Restore Session
+    func restoreSession() async {
+        defer {
+            Task { await MainActor.run { self.checkingSession = false } }
+        }
+        
+        guard let access = KeychainManager.load("accessToken"),
+              let refresh = KeychainManager.load("refreshToken") else {
+            print("⚠️ No saved session in Keychain")
+            return
+        }
+        
+        do {
+            let session = try await client.auth.setSession(
+                accessToken: access,
+                refreshToken: refresh
+            )
+            await MainActor.run {
+                self.session = session
+                self.user = session.user
+                self.isAuthenticated = true
+            }
+            print("✅ Restored session from Keychain")
+        } catch {
+            print("⚠️ Failed to restore session: \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: Sign Up
     func signUp(fname: String, lname: String, username: String, email: String, password: String) async {
-        isLoading = true
-        errMsg = nil
+        await MainActor.run {
+            self.isLoading = true
+            self.errMsg = nil
+        }
         do {
             try await client.auth.signUp(
                 email: email,
@@ -63,14 +116,18 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    // MARK: Sign Out
     func signOut() async {
         do {
             try await client.auth.signOut()
+            KeychainManager.delete("accessToken")
+            KeychainManager.delete("refreshToken")
             await MainActor.run {
                 self.session = nil
                 self.user = nil
                 self.isAuthenticated = false
             }
+            print("👋 Signed out and cleared tokens")
         } catch {
             await MainActor.run { self.errMsg = error.localizedDescription }
         }
