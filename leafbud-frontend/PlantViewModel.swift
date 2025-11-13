@@ -173,6 +173,7 @@ final class PlantInstViewModel: ObservableObject {
         }
         print("Fetching user...")
         await fetchUser(username: username)
+        
         print(self.user?.username ?? "No user")
         print(self.user?.plantInstId ?? "No plant associated with this user")
         
