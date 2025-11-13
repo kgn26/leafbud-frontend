@@ -38,6 +38,7 @@
 		84052E5F2EBBEE50007D1495 /* leafbud-frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "leafbud-frontend.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84052E6E2EBBEE52007D1495 /* leafbud-frontendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "leafbud-frontendTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84052E782EBBEE52007D1495 /* leafbud-frontendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "leafbud-frontendUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		84052E9F2EBC0016007D1495 /* secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -112,6 +113,7 @@
 				84052E7B2EBBEE52007D1495 /* leafbud-frontendUITests */,
 				84052E9C2EBBFEA5007D1495 /* Frameworks */,
 				84052E602EBBEE50007D1495 /* Products */,
+				84052E9F2EBC0016007D1495 /* secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -264,6 +266,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84052EA12EBC0020007D1495 /* secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +326,7 @@
 /* Begin XCBuildConfiguration section */
 		84052E802EBBEE52007D1495 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -386,6 +390,7 @@
 		};
 		84052E812EBBEE52007D1495 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -442,6 +447,7 @@
 		};
 		84052E832EBBEE52007D1495 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -478,6 +484,7 @@
 		};
 		84052E842EBBEE52007D1495 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
