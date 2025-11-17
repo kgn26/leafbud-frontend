@@ -13,12 +13,17 @@ import SwiftUI
 
 enum SurveyThreeIcon: CaseIterable {
     // UPDATED: Cases for plant size
+    case xsmall
     case small
     case medium
     case large
+    case xlarge
     
     var iconName: String {
         switch self {
+        case .xsmall:
+            // SFSymbol for extra small size (e.g., a tiny leaf)
+            return "atom"
         case .small:
             // SFSymbol for small size (e.g., a small leaf)
             return "leaf.fill"
@@ -28,6 +33,9 @@ enum SurveyThreeIcon: CaseIterable {
         case .large:
             // SFSymbol for large size (e.g., multiple trees/a large home)
             return "house.fill"
+        case .xlarge:
+            // SFSymbol for extra large size (e.g., a large tree)
+            return "globe"
         }
     }
 }
@@ -37,6 +45,7 @@ enum SurveyThreeIcon: CaseIterable {
 // ===================================================
 
 struct SurveyViewThree: View {
+    @ObservedObject var surveyData: SurveyData
     
     // State to simulate selection
     @State private var selectedIcon: SurveyThreeIcon? = nil
@@ -68,46 +77,74 @@ struct SurveyViewThree: View {
                     VStack(spacing: 15) { // Spacing between buttons
                         
                         SurveyThreeOptionButton(
+                            title: "Extra Small (Tiny)",
+                            icon: .xsmall,
+                            isSelected: selectedIcon == .xsmall,
+                            action: {
+                                selectedIcon = .xsmall;
+                                surveyData.size = "XS";
+                                print("Selected ExtraSmall")
+                            }
+                        )
+                        
+                        SurveyThreeOptionButton(
                             title: "Small (Tabletop/Desk)",
                             icon: .small,
                             isSelected: selectedIcon == .small,
-                            action: { selectedIcon = .small; print("Selected Small") }
+                            action: {
+                                selectedIcon = .small;
+                                surveyData.size = "S";
+                                print("Selected Small")
+                            }
                         )
                         
                         SurveyThreeOptionButton(
                             title: "Medium (Shelf/Stand)",
                             icon: .medium,
                             isSelected: selectedIcon == .medium,
-                            action: { selectedIcon = .medium; print("Selected Medium") }
+                            action: {
+                                selectedIcon = .medium;
+                                surveyData.size = "M";
+                                print("Selected Medium")
+                            }
                         )
                         
                         SurveyThreeOptionButton(
                             title: "Large (Floor Plant)",
                             icon: .large,
                             isSelected: selectedIcon == .large,
-                            action: { selectedIcon = .large; print("Selected Large") }
+                            action: { selectedIcon = .large;
+                                surveyData.size = "L";
+                                print("Selected Large") }
+                        )
+                        
+                        SurveyThreeOptionButton(
+                            title: "Extra Large (Giantz)",
+                            icon: .xlarge,
+                            isSelected: selectedIcon == .xlarge,
+                            action: {
+                                selectedIcon = .xlarge;
+                                surveyData.size = "XL";
+                                print("Selected Extra Large")
+                            }
                         )
                     }
                     
                     Spacer() // Pushes remaining content up
+                    
+                    NavigationLink(destination: SurveyViewFour(surveyData: surveyData)) {
+                        Text("Next")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(selectedIcon != nil ? darkGreen : buttonGreen)
+                            .cornerRadius(15)
+                    }
+                    .disabled(selectedIcon == nil)
                 }
                 .padding(.horizontal, 25)
-                
-                // Manual Back Button (Placeholder)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { print("Back button pressed (No navigation functionality yet)") }) {
-                            Image(systemName: "arrow.left")
-                                .font(.title2)
-                                .foregroundColor(darkGreen)
-                                .padding(8)
-                                .background(Color.white.opacity(0.8))
-                                .clipShape(Circle())
-                        }
-                    }
-                }
             }
-            .navigationBarBackButtonHidden(true)
         }
     }
 }
@@ -131,27 +168,21 @@ struct SurveyThreeOptionButton: View {
             HStack {
                 Text(title)
                     .font(.headline)
-                
                 Spacer()
-                
                 Image(systemName: icon.iconName)
                     .font(.title2)
             }
             .padding(.vertical, 15)
             .padding(.horizontal, 20)
             .frame(maxWidth: .infinity)
-            .background(buttonGreen)
-            .foregroundColor(darkGreen)
+            .background(isSelected ? darkGreen : buttonGreen)   // 🟢 Highlight selected
+            .foregroundColor(isSelected ? .white : darkGreen)   // 🟢 Adjust text/icon color
             .cornerRadius(15)
-        }
-    }
-}
-
-// MARK: - Preview
-struct SurveyViewThree_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SurveyViewThree()
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(darkGreen, lineWidth: isSelected ? 3 : 0)
+            )
+            .animation(.easeInOut(duration: 0.15), value: isSelected)
         }
     }
 }

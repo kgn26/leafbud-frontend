@@ -32,6 +32,7 @@ enum SurveyFourIcon: CaseIterable {
 // ===================================================
 
 struct SurveyViewFour: View {
+    @ObservedObject var surveyData: SurveyData
     
     // State to simulate selection
     @State private var selectedIcon: SurveyFourIcon? = nil
@@ -66,40 +67,43 @@ struct SurveyViewFour: View {
                             title: "Yes, 100% Non-Toxic",
                             icon: .yesSafe,
                             isSelected: selectedIcon == .yesSafe,
-                            action: { selectedIcon = .yesSafe; print("Selected Safe") }
+                            action: {
+                                selectedIcon = .yesSafe;
+                                surveyData.hasPets = true;
+                                print("Selected Safe")
+                            }
                         )
                         
                         SurveyFourOptionButton(
                             title: "No, safety is not a concern",
                             icon: .noNeed,
                             isSelected: selectedIcon == .noNeed,
-                            action: { selectedIcon = .noNeed; print("Selected Not Concerned") }
+                            action: {
+                                selectedIcon = .noNeed;
+                                surveyData.hasPets = false;
+                                print("Selected Not Concerned")
+                            }
                         )
                         
                         // Add a placeholder to balance the layout, matching the other three-option screens
                         Spacer()
-                            .frame(height: 50)
+                        
+                        NavigationLink(destination: RecommendationView(surveyData: surveyData)) {
+                            Text("See My Recommendations")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(selectedIcon != nil ? darkGreen : buttonGreen)
+                                .cornerRadius(15)
+                        }
+                        .disabled(selectedIcon == nil)
                     }
                     
                     Spacer() // Pushes remaining content up
                 }
                 .padding(.horizontal, 25)
-                
-                // Manual Back Button (Placeholder)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { print("Back button pressed (No navigation functionality yet)") }) {
-                            Image(systemName: "arrow.left")
-                                .font(.title2)
-                                .foregroundColor(darkGreen)
-                                .padding(8)
-                                .background(Color.white.opacity(0.8))
-                                .clipShape(Circle())
-                        }
-                    }
-                }
             }
-            .navigationBarBackButtonHidden(true)
         }
     }
 }
@@ -122,27 +126,21 @@ struct SurveyFourOptionButton: View {
             HStack {
                 Text(title)
                     .font(.headline)
-                
                 Spacer()
-                
                 Image(systemName: icon.iconName)
                     .font(.title2)
             }
             .padding(.vertical, 15)
             .padding(.horizontal, 20)
             .frame(maxWidth: .infinity)
-            .background(buttonGreen)
-            .foregroundColor(darkGreen)
+            .background(isSelected ? darkGreen : buttonGreen)   // 🟢 Highlight selected
+            .foregroundColor(isSelected ? .white : darkGreen)   // 🟢 Adjust text/icon color
             .cornerRadius(15)
-        }
-    }
-}
-
-// MARK: - Preview
-struct SurveyViewFour_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SurveyViewFour()
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(darkGreen, lineWidth: isSelected ? 3 : 0)
+            )
+            .animation(.easeInOut(duration: 0.15), value: isSelected)
         }
     }
 }

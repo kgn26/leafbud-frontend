@@ -36,6 +36,7 @@ enum SurveyOneIcon: CaseIterable {
 // ===================================================
 
 struct SurveyViewOne: View {
+    @ObservedObject var surveyData: SurveyData
     
     // State to simulate selection
     @State private var selectedIcon: SurveyOneIcon? = nil
@@ -70,43 +71,56 @@ struct SurveyViewOne: View {
                             title: "Leave me alone",
                             icon: .leaveAlone,
                             isSelected: selectedIcon == .leaveAlone,
-                            action: { selectedIcon = .leaveAlone; print("Selected Leave Alone") }
+                            action: {
+                                selectedIcon = .leaveAlone;
+                                surveyData.difficulty = "EASY"
+                                print("Selected Leave Alone")
+                            }
                         )
                         
                         SurveyOneOptionButton(
                             title: "I like the attention",
                             icon: .attention,
                             isSelected: selectedIcon == .attention,
-                            action: { selectedIcon = .attention; print("Selected Attention") }
+                            action: {
+                                selectedIcon = .attention;
+                                surveyData.difficulty = "MEDIUM"
+                                print("Selected Attention")
+                            }
                         )
                         
                         SurveyOneOptionButton(
                             title: "Don't leave me",
                             icon: .dontLeave,
                             isSelected: selectedIcon == .dontLeave,
-                            action: { selectedIcon = .dontLeave; print("Selected Don't Leave") }
+                            action: {
+                                selectedIcon = .dontLeave;
+                                surveyData.difficulty = "HARD"
+                                print("Selected Don't Leave")
+                            }
                         )
                     }
                     
                     Spacer() // Pushes remaining content up
+                    
+                    // --- Next Button ---
+                    NavigationLink(
+                        destination: SurveyViewTwo(surveyData: surveyData),
+                        label: {
+                            Text("Next")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 15)
+                                .foregroundColor(.white)
+                                .background(selectedIcon != nil ? darkGreen : buttonGreen)
+                                .foregroundColor(.white)
+                                .cornerRadius(15)
+                        }
+                    )
+                    .disabled(selectedIcon == nil)
                 }
                 .padding(.horizontal, 25)
-                
-                // Manual Back Button (Placeholder, non-functional yet)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { print("Back button pressed (No navigation functionality yet)") }) {
-                            Image(systemName: "arrow.left")
-                                .font(.title2)
-                                .foregroundColor(darkGreen)
-                                .padding(8)
-                                .background(Color.white.opacity(0.8))
-                                .clipShape(Circle())
-                        }
-                    }
-                }
             }
-            .navigationBarBackButtonHidden(true)
         }
     }
 }
@@ -129,27 +143,21 @@ struct SurveyOneOptionButton: View {
             HStack {
                 Text(title)
                     .font(.headline)
-                
                 Spacer()
-                
                 Image(systemName: icon.iconName)
                     .font(.title2)
             }
             .padding(.vertical, 15)
             .padding(.horizontal, 20)
             .frame(maxWidth: .infinity)
-            .background(buttonGreen)
-            .foregroundColor(darkGreen)
+            .background(isSelected ? darkGreen : buttonGreen)   // 🟢 Highlight selected
+            .foregroundColor(isSelected ? .white : darkGreen)   // 🟢 Adjust text/icon color
             .cornerRadius(15)
-        }
-    }
-}
-
-// MARK: - Preview
-struct SurveyViewOne_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SurveyViewOne()
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(darkGreen, lineWidth: isSelected ? 3 : 0)
+            )
+            .animation(.easeInOut(duration: 0.15), value: isSelected)
         }
     }
 }
