@@ -83,71 +83,71 @@ struct InfoCard<Content: View>: View {
 
 struct ProfileView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
-    var nextWatering: String {
-        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
-            return "Optional"
-        }
-        let nextDue = plantInst.userPlant?.carePlan?["WATER"]?.dueIn ?? 0
-        switch nextDue {
-        case 1: return "Tomorrow"
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        case ...(-2): return "\(abs(nextDue)) days late"
-        default: return "in \(nextDue) days"
-        }
-    }
-    var nextRepot: String {
-        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
-            return "Optional"
-        }
-        let nextDue = plantInst.userPlant?.carePlan?["REPOT"]?.dueIn ?? 0
-        switch nextDue {
-        case 1: return "Tomorrow"
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        case ...(-2): return "\(abs(nextDue)) days late"
-        default: return "in \(nextDue) days"
-        }
-    }
-    var nextMisting: String {
-        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
-            return "Optional"
-        }
-        let nextDue = plantInst.userPlant?.carePlan?["MIST"]?.dueIn ?? 0
-        switch nextDue {
-        case 1: return "Tomorrow"
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        case ...(-2): return "\(abs(nextDue)) days late"
-        default: return "in \(nextDue) days"
-        }
-    }
-    var nextPruning: String {
-        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
-            return "Optional"
-        }
-        let nextDue = plantInst.userPlant?.carePlan?["PRUNE"]?.dueIn ?? 0
-        switch nextDue {
-        case 1: return "Tomorrow"
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        case ...(-2): return "\(abs(nextDue)) days late"
-        default: return "in \(nextDue) days"
-        }
-    }
-    var nextFertilizing: String {
-        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
-            return "Optional"
-        }
-        let nextDue = plantInst.userPlant?.carePlan?["FERTILIZE"]?.dueIn ?? 0
-        switch nextDue {
-        case 1: return "Tomorrow"
-        case 0: return "Today"
-        case -1: return "Yesterday"
-        case ...(-2): return "\(abs(nextDue)) days late"
-        default: return "in \(nextDue) days"
-        }
-    }
+//    var nextWatering: String {
+//        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+//            return "Optional"
+//        }
+//        let nextDue = plantInst.userPlant?.carePlan?["WATER"]?.dueIn ?? 0
+//        switch nextDue {
+//        case 1: return "Tomorrow"
+//        case 0: return "Today"
+//        case -1: return "Yesterday"
+//        case ...(-2): return "\(abs(nextDue)) days late"
+//        default: return "in \(nextDue) days"
+//        }
+//    }
+//    var nextRepot: String {
+//        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+//            return "Optional"
+//        }
+//        let nextDue = plantInst.userPlant?.carePlan?["REPOT"]?.dueIn ?? 0
+//        switch nextDue {
+//        case 1: return "Tomorrow"
+//        case 0: return "Today"
+//        case -1: return "Yesterday"
+//        case ...(-2): return "\(abs(nextDue)) days late"
+//        default: return "in \(nextDue) days"
+//        }
+//    }
+//    var nextMisting: String {
+//        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+//            return "Optional"
+//        }
+//        let nextDue = plantInst.userPlant?.carePlan?["MIST"]?.dueIn ?? 0
+//        switch nextDue {
+//        case 1: return "Tomorrow"
+//        case 0: return "Today"
+//        case -1: return "Yesterday"
+//        case ...(-2): return "\(abs(nextDue)) days late"
+//        default: return "in \(nextDue) days"
+//        }
+//    }
+//    var nextPruning: String {
+//        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+//            return "Optional"
+//        }
+//        let nextDue = plantInst.userPlant?.carePlan?["PRUNE"]?.dueIn ?? 0
+//        switch nextDue {
+//        case 1: return "Tomorrow"
+//        case 0: return "Today"
+//        case -1: return "Yesterday"
+//        case ...(-2): return "\(abs(nextDue)) days late"
+//        default: return "in \(nextDue) days"
+//        }
+//    }
+//    var nextFertilizing: String {
+//        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
+//            return "Optional"
+//        }
+//        let nextDue = plantInst.userPlant?.carePlan?["FERTILIZE"]?.dueIn ?? 0
+//        switch nextDue {
+//        case 1: return "Tomorrow"
+//        case 0: return "Today"
+//        case -1: return "Yesterday"
+//        case ...(-2): return "\(abs(nextDue)) days late"
+//        default: return "in \(nextDue) days"
+//        }
+//    }
     
     var body: some View {
         VStack {
@@ -184,9 +184,9 @@ struct ProfileView: View {
                         HStack(spacing: 25) {
                             VerticalLabel(
                                 text: (Text("Next watering\n")
-                                       + Text(self.nextWatering))
+                                       + Text(plantInst.nextWateringDue))
                                 .font(.caption),
-                                imageName: "waterIcon"
+                                imageName: "wateringIcon"
                             )
                             
                             VerticalLabel(
@@ -201,9 +201,9 @@ struct ProfileView: View {
                             
                             VerticalLabel(
                                 text: (Text("Next misting\n")
-                                       + Text(self.nextMisting))
+                                       + Text(plantInst.nextMistingDue))
                                 .font(.caption),
-                                imageName: "waterIcon"
+                                imageName: "mistingIcon"
                             )
                         }
                     }
@@ -217,7 +217,7 @@ struct ProfileView: View {
                         HStack(spacing: 25) {
                             VerticalLabel(
                                 text: (Text("Next fertilizing\n")
-                                       + Text(self.nextFertilizing))
+                                       + Text(plantInst.nextFertilizingDue))
                                 .font(.caption),
                                 imageName: "soilIcon"
                             )
@@ -233,18 +233,18 @@ struct ProfileView: View {
                         HStack(spacing: 25) {
                             VerticalLabel(
                                 text: (Text("Next repotting\n")
-                                       + Text(self.nextRepot))
+                                       + Text(plantInst.nextRepottingDue))
                                 .font(.caption),
                                 //                            .fontDesign(.serif),
-                                imageName: "soilIcon"
+                                imageName: "repotIcon"
                             )
                             
                             VerticalLabel(
                                 text: (Text("Next pruning\n")
-                                       + Text(self.nextPruning))
+                                       + Text(plantInst.nextPruningDue))
                                 .font(.caption),
                                 //                            .fontDesign(.serif),
-                                imageName: "soilIcon"
+                                imageName: "pruningIcon"
                             )
                         }
                     }

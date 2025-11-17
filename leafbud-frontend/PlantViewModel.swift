@@ -62,6 +62,41 @@ struct CareTask: Codable {
     }
 }
 
+struct CareUpdate: Codable {
+    let id: UUID
+    let instanceId: UUID
+    let type: String
+    let intervalDays: Int
+    let lastCompletedAt: String?
+    let graceDays: Int?
+    let optional: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case instanceId = "instance_id"
+        case type
+        case intervalDays = "interval_days"
+        case lastCompletedAt = "last_completed_at"
+        case graceDays = "grace_days"
+        case optional
+    }
+}
+
+struct CareUpdateRequest: Codable {
+    let instanceId: UUID
+    let type: String
+    
+    enum CodingKeys: String, CodingKey {
+        case instanceId = "instance_id"
+        case type
+    }
+}
+
+struct CareUpdateResponse: Codable {
+    let ok: Bool
+    let result: CareUpdate
+}
+
 struct User: Codable {
     let id: UUID
     let firstName: String
@@ -111,6 +146,13 @@ final class PlantInstViewModel: ObservableObject {
     @Published var userPlant: PlantInstance?
     @Published var plantInfo: Plant?
     @Published var isLoading: Bool = true
+    
+    // Plant care due dates
+    @Published var nextWateringDue: String = "Optional"
+    @Published var nextMistingDue: String = "Optional"
+    @Published var nextFertilizingDue: String = "Optional"
+    @Published var nextPruningDue: String = "Optional"
+    @Published var nextRepottingDue: String = "Optional"
     
     private let modelContext = SwiftDataManager.context
     private var localPlant: PlantLocal?
@@ -305,6 +347,10 @@ final class PlantInstViewModel: ObservableObject {
                 return
             }
             self.userPlant = decodedResponse.plant
+            
+            // update watering + everything else after fetching
+            self.updateCarePlan()
+            print("Plant care plan has been updated")
         } catch {
             print("Fetch Instance error: \(error)")
         }
@@ -335,5 +381,142 @@ final class PlantInstViewModel: ObservableObject {
         try? modelContext.save()
         self.localPlant = local
         print("💾 Saved plant locally: \(nickname)")
+    }
+    
+    func updatePlantCare(instanceId: UUID, type: String) async {
+        let fetchUrl = "\(apiUrl)/care/"
+        guard let url = URL(string: fetchUrl) else {
+            print("Fetch Instance error: Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let careUpdateRequest = CareUpdateRequest(instanceId: instanceId, type: type)
+        guard let requestBody = try? JSONEncoder().encode(careUpdateRequest) else {
+            print("updatePlantCare error: Cannot encode JSON")
+            return
+        }
+        
+        request.httpBody = requestBody
+
+        print("================== URL Request ==================")
+            
+            // 1. URL and HTTP Method
+            if let url = request.url?.absoluteString {
+                print("URL: \(url)")
+            }
+            print("Method: \(request.httpMethod ?? "N/A")")
+            
+            // 2. HTTP Headers
+            if let headers = request.allHTTPHeaderFields, !headers.isEmpty {
+                print("Headers:")
+                for (key, value) in headers {
+                    print("  \(key): \(value)")
+                }
+            } else {
+                print("Headers: None")
+            }
+            
+            // 3. HTTP Body (Payload)
+            if let body = request.httpBody {
+                // Attempt to convert Data body to a readable String
+                if let bodyString = String(data: body, encoding: .utf8) {
+                    print("Body (Decoded):")
+                    print(bodyString)
+                } else {
+                    print("Body (Raw Data Size): \(body.count) bytes. Could not decode as UTF-8.")
+                }
+            } else {
+                print("Body: None")
+            }
+            
+            print("=================================================")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("updatePlantCare error: No HTTP response")
+                return
+            }
+            
+            if httpResponse.statusCode != 200 {
+                print("updatePlantCare error: HTTP status code \(httpResponse.statusCode)")
+                print("data: \(String(data: data, encoding: .utf8))")
+                return
+            }
+            
+            print("data: \(String(data: data, encoding: .utf8))")
+
+            
+            let decodedResponse = try JSONDecoder().decode(CareUpdateResponse.self, from: data)
+            print("Reached here after decoding")
+            guard decodedResponse.ok else {
+                print("updatePlantCare error: Response not decodable.")
+                return
+            }
+            
+        } catch {
+            print("Fetch Instance error: \(error)")
+        }
+        
+    } // updatePlantCare
+    
+    private func updateCarePlan() {
+        guard let carePlan = userPlant?.carePlan else { return }
+        
+        if let waterTask = carePlan["WATER"] {
+            switch waterTask.dueIn {
+            case 1: self.nextWateringDue = "Tomorrow"
+            case 0: self.nextWateringDue = "Today"
+            case -1: self.nextWateringDue =  "Yesterday"
+            case ...(-2): self.nextWateringDue = "\(abs(waterTask.dueIn)) days late"
+            default: self.nextWateringDue = "in \(waterTask.dueIn) days"
+            }
+        }
+        
+        if let mistTask = carePlan["MIST"] {
+            switch mistTask.dueIn {
+            case 1: self.nextMistingDue = "Tomorrow"
+            case 0: self.nextMistingDue = "Today"
+            case -1: self.nextMistingDue =  "Yesterday"
+            case ...(-2): self.nextMistingDue = "\(abs(mistTask.dueIn)) days late"
+            default : self.nextMistingDue = "in \(mistTask.dueIn) days"
+            }
+        }
+        
+        if let fertilizeTask = carePlan["FERTILIZE"] {
+            switch fertilizeTask.dueIn {
+            case 1: self.nextFertilizingDue = "Tomorrow"
+            case 0: self.nextFertilizingDue = "Today"
+            case -1: self.nextFertilizingDue =  "Yesterday"
+            case ...(-2): self.nextFertilizingDue = "\(abs(fertilizeTask.dueIn)) days late"
+            default : self.nextFertilizingDue = "in \(fertilizeTask.dueIn) days"
+            }
+        }
+        
+        if let pruneTask = carePlan["PRUNE"] {
+            switch pruneTask.dueIn {
+            case 1: self.nextPruningDue = "Tomorrow"
+            case 0: self.nextPruningDue = "Today"
+            case -1: self.nextPruningDue =  "Yesterday"
+            case ...(-2): self.nextPruningDue = "\(abs(pruneTask.dueIn)) days late"
+            default : self.nextPruningDue = "in \(pruneTask.dueIn) days"
+            }
+        }
+        
+        if let repotTask = carePlan["REPOT"] {
+            switch repotTask.dueIn {
+            case 1: self.nextRepottingDue = "Tomorrow"
+            case 0: self.nextRepottingDue = "Today"
+            case -1: self.nextRepottingDue =  "Yesterday"
+            case ...(-2): self.nextRepottingDue = "\(abs(repotTask.dueIn)) days late"
+            default : self.nextRepottingDue = "in \(repotTask.dueIn) days"
+            }
+        }
     }
 }
