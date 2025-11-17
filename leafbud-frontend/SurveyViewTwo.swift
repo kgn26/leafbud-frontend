@@ -30,6 +30,7 @@ enum IconOption: CaseIterable {
 // ===================================================
 
 struct SurveyViewTwo: View {
+    @ObservedObject var surveyData: SurveyData
     
     // State to simulate selection
     @State private var selectedIcon: IconOption? = nil
@@ -64,37 +65,41 @@ struct SurveyViewTwo: View {
                             title: "Bright (South-facing)",
                             icon: .bright,
                             isSelected: selectedIcon == .bright,
-                            action: { selectedIcon = .bright; print("Selected Bright") }
+                            action: {
+                                selectedIcon = .bright;
+                                surveyData.lightPref = "BRIGHT";
+                                print("Selected Bright")
+                            }
                         )
                         
                         OptionButton(
                             title: "Low (North-facing/Shady)",
                             icon: .low,
                             isSelected: selectedIcon == .low,
-                            action: { selectedIcon = .low; print("Selected Low") }
+                            action: {
+                                selectedIcon = .low;
+                                surveyData.lightPref = "LOW";
+                                print("Selected Low")
+                            }
                         )
                     }
                     
-                    Spacer() // Pushes remaining content up
+                    Spacer()
+                    
+                    NavigationLink(destination: SurveyViewThree(surveyData: surveyData)) {
+                        Text("Next")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 15)
+                            .background(darkGreen)
+                            .background(selectedIcon != nil ? darkGreen : buttonGreen)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                    }
+                    .disabled(selectedIcon == nil)
                 }
                 .padding(.horizontal, 25)
-                
-                // Manual Back Button (Placeholder)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { print("Navigate back to SurveyView") }) {
-                            Image(systemName: "arrow.left")
-                                .font(.title2)
-                                .foregroundColor(darkGreen)
-                                .padding(8)
-                                .background(Color.white.opacity(0.8))
-                                .clipShape(Circle())
-                        }
-                    }
-                }
             }
-            // Hides the default back arrow, using the manual one above
-            .navigationBarBackButtonHidden(true)
         }
     }
 }
@@ -117,27 +122,21 @@ struct OptionButton: View {
             HStack {
                 Text(title)
                     .font(.headline)
-                
                 Spacer()
-                
                 Image(systemName: icon.iconName)
                     .font(.title2)
             }
             .padding(.vertical, 15)
             .padding(.horizontal, 20)
             .frame(maxWidth: .infinity)
-            .background(buttonGreen)
-            .foregroundColor(darkGreen)
+            .background(isSelected ? darkGreen : buttonGreen)   // 🟢 Highlight selected
+            .foregroundColor(isSelected ? .white : darkGreen)   // 🟢 Adjust text/icon color
             .cornerRadius(15)
-        }
-    }
-}
-
-// MARK: - Preview
-struct SurveyViewTwo_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SurveyViewTwo()
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(darkGreen, lineWidth: isSelected ? 3 : 0)
+            )
+            .animation(.easeInOut(duration: 0.15), value: isSelected)
         }
     }
 }

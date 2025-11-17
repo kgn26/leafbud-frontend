@@ -19,6 +19,22 @@ struct ContentView: View {
                 .background(Color.backgroundGrn.ignoresSafeArea())
         } else if !auth.isAuthenticated {
             AuthView()
+        } else if auth.user == nil {
+            ZStack {
+                Color.bgGreen.ignoresSafeArea(edges: .all)
+                VStack {
+                    Text("You have to log in to continue")
+                    NavigationLink(destination: AuthView()) {
+                        Text("Go to log in")
+                            .font(.headline)
+                            .padding()
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                    }
+                }
+            }
+        } else if plantInst.userPlant == nil {
+            SurveyView()
         } else {
             MainView()
                 .onAppear {
@@ -37,6 +53,7 @@ struct ContentView: View {
                     }
                     
                     Task { await plantInst.fetchData() }
+                    
                 }
         }
     }
