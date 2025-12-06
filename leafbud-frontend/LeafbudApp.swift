@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct LeafbudApp: App {
+    @StateObject private var locationManager: LocationManager = LocationManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -17,5 +18,7 @@ struct LeafbudApp: App {
         .modelContainer(for: [PlantLocal.self])
         .environmentObject(PlantInstViewModel.shared)
         .environmentObject(AuthViewModel.shared)
+        .environmentObject(locationManager)
     }
 }
+

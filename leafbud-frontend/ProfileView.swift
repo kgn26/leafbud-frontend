@@ -83,6 +83,7 @@ struct InfoCard<Content: View>: View {
 
 struct ProfileView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
+    @EnvironmentObject private var auth: AuthViewModel
 //    var nextWatering: String {
 //        guard let optional = plantInst.userPlant?.carePlan?["WATER"]?.optional, !optional else {
 //            return "Optional"
@@ -151,22 +152,40 @@ struct ProfileView: View {
     
     var body: some View {
         VStack {
+            Button(action: {
+                Task {
+                    auth.isLoading = true
+                    await auth.signOut()
+                    auth.isLoading = false
+                }
+            }) {
+                Text("Sign Out")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color.red)
+                    .cornerRadius(10)
+            }
+            .padding(.top, 80)
+            .padding(.trailing, 20)
+            .frame(maxWidth: .infinity, alignment: .trailing)
             Image("profileCircle")
-                .padding(.top, 100)
+                .padding()
                 .overlay(
                     AsyncImage(url: URL( string: plantInst.plantInfo?.imageUrl ?? "")) { phase in
                         switch phase {
                         case .success(let image):
                             image.resizable()
                                 .scaledToFit()
-                                .frame(width: 70)
-                                .offset(y: 45)
+                                .frame(width: 85)
+                                .offset(y: 0)
                         default:
                             Image("smilePlant")
                                 .resizable()
                                     .scaledToFit()
                                     .frame(width: 60)
-                                    .offset(y: 40)
+                                    .offset(y: 0)
                         }
                     }
                 )
