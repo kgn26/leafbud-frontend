@@ -9,20 +9,18 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
+    @State var currentCareType : Action? = nil
+    @State var isUpdating : Bool = false
     
     var body: some View {
-        if plantInst.isLoading {
-            LoadingView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.backgroundGrn.ignoresSafeArea())
-        } else {
+        ZStack {
+            // Main content always in the tree
             TabView {
                 Tab("", systemImage: "house") {
-                    HomeView()
+                    HomeView(isUpdating: $isUpdating, currentCareType: $currentCareType)
                         .toolbarBackgroundVisibility(.visible, for: .tabBar)
                         .toolbarBackground(Color(.navbarGrn), for: .tabBar)
                 }
-                
                 
                 Tab("", systemImage: "leaf") {
                     ProfileView()
@@ -42,9 +40,23 @@ struct MainView: View {
                         .toolbarBackground(Color(.navbarGrn), for: .tabBar)
                 }
             }
-            //        .toolbarBackground(.visible, for: .automatic)
-            //        .toolbarBackground(Color.green, for: .automatic)
             .tint(Color(.iconGrn))
+            
+            // Loading overlay
+            if plantInst.isLoading {
+                Color.backgroundGrn
+                    .ignoresSafeArea()
+                    .opacity(0.6)
+                
+                LoadingView()
+            }
+        }
+        // ✅ Host the cover at a stable level
+        .fullScreenCover(item: $currentCareType) { action in
+            ActionView(action: action) {
+                isUpdating = false
+                currentCareType = nil
+            }
         }
     }
 }

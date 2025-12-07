@@ -12,9 +12,9 @@ import CoreLocation
 struct plantCareButton : View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @Binding var isWatering : Bool
-    @Binding var currentCareType : String
+    @Binding var currentCareType : Action?
     
-    let careType : String
+    let careType : Action
     let imageName : String
     
     var body: some View {
@@ -23,7 +23,7 @@ struct plantCareButton : View {
             Task {
                 if let instanceId = plantInst.userPlant?.id {
                     isWatering = true
-                    await plantInst.updatePlantCare(instanceId: instanceId, type: careType)
+                    await plantInst.updatePlantCare(instanceId: instanceId, type: careType.type)
                     isWatering = false
                     await plantInst.fetchData()
                 }
@@ -83,8 +83,8 @@ struct HomeView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @EnvironmentObject private var locationManager: LocationManager
     @State private var isExpanded : Bool = false
-    @State private var isUpdating : Bool = false
-    @State private var currentCareType : String = ""
+    @Binding var isUpdating : Bool
+    @Binding var currentCareType : Action?
     @StateObject private var weatherInfo: WeatherViewModel = WeatherViewModel.shared
     
     var body: some View {
@@ -119,42 +119,36 @@ struct HomeView: View {
                     }
                 } // AsyncImage
                 
-                if isUpdating {
-                    Text("wowowow is \(currentCareType) rn")
-                        .font(.title)
-                        .bold()
-                }
-                
                 VStack(spacing: 15) {
                     if isExpanded {
                         plantCareButton(
                             isWatering: $isUpdating,
                             currentCareType: $currentCareType,
-                            careType: "PRUNE",
+                            careType: .prune,
                             imageName: "pruningIcon")
                         
                         plantCareButton(
                             isWatering: $isUpdating,
                             currentCareType: $currentCareType,
-                            careType: "REPOT",
+                            careType: .repot,
                             imageName: "repotIcon")
                         
                         plantCareButton(
                             isWatering: $isUpdating,
                             currentCareType: $currentCareType,
-                            careType: "FERTILIZE",
+                            careType: .fertilize,
                             imageName: "soilIcon")
                         
                         plantCareButton(
                             isWatering: $isUpdating,
                             currentCareType: $currentCareType,
-                            careType: "MIST",
+                            careType: .mist,
                             imageName: "mistingIcon")
                         
                         plantCareButton(
                             isWatering: $isUpdating,
                             currentCareType: $currentCareType,
-                            careType: "WATER",
+                            careType: .water,
                             imageName: "wateringIcon")
                     }
                     
@@ -183,6 +177,7 @@ struct HomeView: View {
                     
                 }
             }
+            .onDisappear { print("HomeView disappeared ❌") }
         }
     }
 }

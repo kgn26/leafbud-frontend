@@ -529,48 +529,48 @@ final class PlantInstViewModel: ObservableObject {
         self.isLoading = true
         defer { self.isLoading = false }
         
-        loadLocalPlant()
-        if self.loadedFromCache, let cached = self.localPlant {
-            // Hydrate partial info into userPlant and plantInfo so UI has something to display
-            self.userPlant = PlantInstance(
-                id: UUID(uuidString: cached.id) ?? UUID(),
-                userId: UUID(),  // dummy placeholders
-                plantId: UUID(),
-                nickname: cached.nickname,
-                location: nil,
-                createdAt: "",
-                updatedAt: "",
-                carePlan: nil
-            )
-            
-            self.plantInfo = Plant(
-                id: UUID(),  // dummy placeholders
-                commonName: cached.commonName,
-                imageUrl: cached.imageURL,
-                lightPref: "",
-                difficulty: "",
-                waterInt: 0,
-                mistInt: nil,
-                fertilizeInt: 0,
-                repotInt: 0,
-                pruneInt: 0,
-                petToxic: false,
-                tags: [],
-                size: "",
-                soilType: "",
-                createdAt: "",
-                updatedAt: ""
-            )
-            
-            // Prefetch image
-            if let imageUrl = cached.imageURL, let url = URL(string: imageUrl) {
-                let _ = try? await URLSession.shared.data(from: url)
-            }
-            
-            // UI can start rendering immediately
-            self.isLoading = false
-            print("🌿 Hydrated userPlant and plantInfo from local cache")
-        }
+//        loadLocalPlant()
+//        if self.loadedFromCache, let cached = self.localPlant {
+//            // Hydrate partial info into userPlant and plantInfo so UI has something to display
+//            self.userPlant = PlantInstance(
+//                id: UUID(uuidString: cached.id) ?? UUID(),
+//                userId: UUID(),  // dummy placeholders
+//                plantId: UUID(),
+//                nickname: cached.nickname,
+//                location: nil,
+//                createdAt: "",
+//                updatedAt: "",
+//                carePlan: nil
+//            )
+//            
+//            self.plantInfo = Plant(
+//                id: UUID(),  // dummy placeholders
+//                commonName: cached.commonName,
+//                imageUrl: cached.imageURL,
+//                lightPref: "",
+//                difficulty: "",
+//                waterInt: 0,
+//                mistInt: nil,
+//                fertilizeInt: 0,
+//                repotInt: 0,
+//                pruneInt: 0,
+//                petToxic: false,
+//                tags: [],
+//                size: "",
+//                soilType: "",
+//                createdAt: "",
+//                updatedAt: ""
+//            )
+//            
+//            // Prefetch image
+//            if let imageUrl = cached.imageURL, let url = URL(string: imageUrl) {
+//                let _ = try? await URLSession.shared.data(from: url)
+//            }
+//            
+//            // UI can start rendering immediately
+//            self.isLoading = false
+//            print("🌿 Hydrated userPlant and plantInfo from local cache")
+//        }
         
         var username = ""
         if case let .string(user) = auth.user?.userMetadata["username"] {
