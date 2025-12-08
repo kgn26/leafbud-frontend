@@ -42,6 +42,8 @@ struct ItemCard: View {
 }
 
 public struct StoreView: View {
+    @Binding var numCoins: Int8
+    
     public var body: some View {
         VStack(spacing: 25) {
             Image("tokenCounter")
@@ -50,7 +52,7 @@ public struct StoreView: View {
                 .frame(width: 100)
                 .padding(.top, 10)
                 .overlay(
-                    Text("001")
+                    Text(String(format: "%03d", numCoins))
                         .font(.headline)
                         .offset(x: 17, y: 5)
                 )
@@ -82,6 +84,7 @@ public struct StoreView: View {
 }
 
 #Preview {
-    StoreView()
+    @State @Previewable var numCoins: Int8 = 1
+    StoreView(numCoins: $numCoins)
 }
 
