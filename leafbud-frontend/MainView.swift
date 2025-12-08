@@ -11,6 +11,7 @@ struct MainView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @State var currentCareType : Action? = nil
     @State var isUpdating : Bool = false
+    @State var numCoins: Int8 = 0
     
     var body: some View {
         ZStack {
@@ -29,13 +30,13 @@ struct MainView: View {
                 }
                 
                 Tab("", systemImage: "cart") {
-                    StoreView()
+                    StoreView(numCoins: $numCoins)
                         .toolbarBackgroundVisibility(.visible, for: .tabBar)
                         .toolbarBackground(Color(.navbarGrn), for: .tabBar)
                 }
                 
                 Tab("", systemImage: "plus.square") {
-                    Text("Collection")
+                    CollectionView()
                         .toolbarBackgroundVisibility(.visible, for: .tabBar)
                         .toolbarBackground(Color(.navbarGrn), for: .tabBar)
                 }
@@ -54,6 +55,7 @@ struct MainView: View {
         // ✅ Host the cover at a stable level
         .fullScreenCover(item: $currentCareType) { action in
             ActionView(action: action) {
+                numCoins += 1
                 isUpdating = false
                 currentCareType = nil
             }
