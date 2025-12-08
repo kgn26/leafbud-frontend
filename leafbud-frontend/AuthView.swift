@@ -171,6 +171,7 @@ struct SignUpView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var termsRead = false
+    @State private var signUpFailed = false
     @EnvironmentObject var authvm: AuthViewModel
     @Environment(\.dismiss) private var dismiss
     
@@ -226,6 +227,8 @@ struct SignUpView: View {
                     await authvm.signUp(fname: fname, lname: lname, username: username, email: email, password: password)
                     if authvm.errMsg == nil {
                         dismiss()
+                    } else {
+                        signUpFailed = true
                     }
                 }
             }) {
@@ -264,7 +267,7 @@ struct SignUpView: View {
             GoogleSignInButtonView()
             AppleSignInButtonView()
             
-            NavigationLink(destination: SignUpView()) {
+            NavigationLink(destination: SignInView()) {
                 Text("Have an account?")
                     .foregroundStyle(Color(.textGreen))
                     .fontDesign(.serif)
@@ -279,6 +282,16 @@ struct SignUpView: View {
         .background(Color(.bgGreen).ignoresSafeArea())
         .sheet(isPresented: $authvm.signedUp) {
             Text("Account created. Please log in to proceed!")
+        }
+        .alert(
+            "Sign Up Failed",
+            isPresented: $signUpFailed
+        ) {
+            Button("OK") {
+                // Handle the acknowledgement.
+            }
+        } message: {
+            Text("Please check your credentials and try again.")
         }
     }
 }

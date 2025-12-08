@@ -13,7 +13,6 @@
 		84052E992EBBFD01007D1495 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E982EBBFD01007D1495 /* Realtime */; };
 		84052E9B2EBBFD01007D1495 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E9A2EBBFD01007D1495 /* Storage */; };
 		84052E9E2EBBFEA5007D1495 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 84052E9D2EBBFEA5007D1495 /* Supabase */; };
-		84052EA12EBC0020007D1495 /* secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 84052E9F2EBC0016007D1495 /* secrets.xcconfig */; };
 		84FE5BEA2EBE8CFA00A78864 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 84FE5BE92EBE8CFA00A78864 /* GoogleSignIn */; };
 		84FE5BEC2EBE8CFA00A78864 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 84FE5BEB2EBE8CFA00A78864 /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
@@ -43,7 +42,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		84052EA52EBD5118007D1495 /* Exceptions for "leafbud-frontend" folder in "leafbud-frontend" target */ = {
+		1C54D4EA2ECBD80C00EFB42E /* Exceptions for "leafbud-frontend" folder in "leafbud-frontend" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -56,7 +55,7 @@
 		84052E612EBBEE50007D1495 /* leafbud-frontend */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				84052EA52EBD5118007D1495 /* Exceptions for "leafbud-frontend" folder in "leafbud-frontend" target */,
+				1C54D4EA2ECBD80C00EFB42E /* Exceptions for "leafbud-frontend" folder in "leafbud-frontend" target */,
 			);
 			path = "leafbud-frontend";
 			sourceTree = "<group>";
@@ -267,7 +266,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84052EA12EBC0020007D1495 /* secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
