@@ -9,7 +9,7 @@
 import SwiftUI
 import CoreLocation
 
-struct plantCareButton : View {
+struct PlantCareButton : View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @Binding var isWatering : Bool
     @Binding var currentCareType : Action?
