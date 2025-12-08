@@ -40,7 +40,6 @@ struct MainView: View {
                         .toolbarBackgroundVisibility(.visible, for: .tabBar)
                         .toolbarBackground(Color(.navbarGrn), for: .tabBar)
                 }
-                .tint(Color(.navIconGrn))
             }
             .tint(Color(.iconGrn))
             

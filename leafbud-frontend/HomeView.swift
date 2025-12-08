@@ -21,10 +21,6 @@ struct PlantCareButton : View {
     let labelColor : Color
     let labelWidth : CGFloat
     
-    let label : String
-    let labelColor : Color
-    let labelWidth : CGFloat
-    
     var body: some View {
         HStack {
             ZStack {
@@ -102,10 +98,11 @@ struct ExpandablePlantCareMenu: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @Binding var isUpdating : Bool
     @Binding var currentCareType : Action?
+    @State private var isExpanded = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 15) {
-            if plantInst.isExpanded {
+            if isExpanded {
                 Group {
                     PlantCareButton(
                         isWatering: $isUpdating,
@@ -166,7 +163,7 @@ struct ExpandablePlantCareMenu: View {
             
             Button {
                 withAnimation(.easeOut(duration: 0.25)) { // Use a slight bounce or ease-out curve
-                    plantInst.isExpanded.toggle()
+                    isExpanded.toggle()
                 }
             } label: {
                 Image("expandIcon")
@@ -221,14 +218,14 @@ struct HomeView: View {
                 } // AsyncImage
                 
                 // 🌿 1. THE DIMMING OVERLAY
-                if plantInst.isExpanded {
+                if isExpanded {
                     Color.black
                         .opacity(0.4) // Adjust opacity for desired dimness (e.g., 0.4)
                         .ignoresSafeArea()
                         .onTapGesture {
                             // Optional: Tap anywhere on the dimmed area to close the menu
                             withAnimation(.easeOut(duration: 0.25)) {
-                                plantInst.isExpanded = false
+                                isExpanded = false
                             }
                         }
                         // Add animation for smooth appearance/disappearance
@@ -244,13 +241,15 @@ struct HomeView: View {
             }
             .onAppear {
                 Task {
+                    print("Getting weather info...")
                     if let location = locationManager.location {
+                        print("Location found!")
                         let lat = location.latitude
                         let lon = location.longitude
                         await weatherInfo.fetchWeather(lat: lat, lon: lon)
                         print("Done, weather info fetched!")
                     }
-                    
+                    print("That's it...")
                 }
             }
             .onDisappear { print("HomeView disappeared ❌") }
