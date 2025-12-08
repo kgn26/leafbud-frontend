@@ -87,3 +87,4 @@ public struct StoreView: View {
     @State @Previewable var numCoins: Int8 = 1
     StoreView(numCoins: $numCoins)
 }
+

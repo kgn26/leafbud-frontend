@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  MainView.swift
 //  leafbud-frontend
 //
 //  Created by Victor Li on 11/6/25.
@@ -40,6 +40,7 @@ struct MainView: View {
                         .toolbarBackgroundVisibility(.visible, for: .tabBar)
                         .toolbarBackground(Color(.navbarGrn), for: .tabBar)
                 }
+                .tint(Color(.navIconGrn))
             }
             .tint(Color(.iconGrn))
             
