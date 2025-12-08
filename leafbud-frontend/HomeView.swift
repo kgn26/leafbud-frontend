@@ -10,6 +10,7 @@ import SwiftUI
 import CoreLocation
 
 struct PlantCareButton : View {
+struct PlantCareButton : View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @Binding var isWatering : Bool
     @Binding var currentCareType : Action?
@@ -17,24 +18,43 @@ struct PlantCareButton : View {
     let careType : Action
     let imageName : String
     
+    let label : String
+    let labelColor : Color
+    let labelWidth : CGFloat
+    
+    let label : String
+    let labelColor : Color
+    let labelWidth : CGFloat
+    
     var body: some View {
-        Button {
-            currentCareType = careType
-            Task {
-                if let instanceId = plantInst.userPlant?.id {
-                    isWatering = true
-                    await plantInst.updatePlantCare(instanceId: instanceId, type: careType.type)
-                    isWatering = false
-                    await plantInst.fetchData()
-                }
+        HStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(labelColor)
+                    .frame(width: labelWidth, height: 50)
+                
+                Text(label)
+                    .foregroundColor(.white)
+                    .bold()
             }
-        } label: {
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 50)
+            
+            Button {
+                currentCareType = careType
+                Task {
+                    if let instanceId = plantInst.userPlant?.id {
+                        isWatering = true
+                        await plantInst.updatePlantCare(instanceId: instanceId, type: careType.type)
+                        isWatering = false
+                        await plantInst.fetchData()
+                    }
+                }
+            } label: {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50)
+            }
         }
-        
     }
 }
 
@@ -79,6 +99,88 @@ struct WeatherPillView: View {
     }
 }
 
+struct ExpandablePlantCareMenu: View {
+    @EnvironmentObject private var plantInst: PlantInstViewModel
+    @Binding var isUpdating : Bool
+    @Binding var currentCareType : Action?
+    
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 15) {
+            if plantInst.isExpanded {
+                Group {
+                    PlantCareButton(
+                        isWatering: $isUpdating,
+                        currentCareType: $currentCareType,
+                        careType: .prune,
+                        imageName: "pruningIcon",
+                        label: "Prune",
+                        labelColor: Color.iconOg,
+                        labelWidth: 90
+                    )
+                    
+                    PlantCareButton(
+                        isWatering: $isUpdating,
+                        currentCareType: $currentCareType,
+                        careType: .repot,
+                        imageName: "repotIcon",
+                        label: "Repot",
+                        labelColor: Color.iconOg,
+                        labelWidth: 90
+                    )
+                    
+                    PlantCareButton(
+                        isWatering: $isUpdating,
+                        currentCareType: $currentCareType,
+                        careType: .fertilize,
+                        imageName: "soilIcon",
+                        label: "Fertilize",
+                        labelColor: Color.iconGrn,
+                        labelWidth: 105
+                    )
+                    
+                    PlantCareButton(
+                        isWatering: $isUpdating,
+                        currentCareType: $currentCareType,
+                        careType: .mist,
+                        imageName: "mistingIcon",
+                        label: "Mist",
+                        labelColor: Color.iconBlue,
+                        labelWidth: 85
+                    )
+                    
+                    PlantCareButton(
+                        isWatering: $isUpdating,
+                        currentCareType: $currentCareType,
+                        careType: .water,
+                        imageName: "wateringIcon",
+                        label: "Water",
+                        labelColor: Color.iconBlue,
+                        labelWidth: 100
+                    )
+                }
+                // Moving up animation
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .padding(.trailing, 5)
+                // Ensure the VStack is rendered on top of the Color.black (dimmed background) view
+                .zIndex(1)
+            }
+            
+            Button {
+                withAnimation(.easeOut(duration: 0.25)) { // Use a slight bounce or ease-out curve
+                    plantInst.isExpanded.toggle()
+                }
+            } label: {
+                Image("expandIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60)
+            }
+    
+        }
+    }
+}
+
+
 struct HomeView: View {
     @EnvironmentObject private var plantInst: PlantInstViewModel
     @EnvironmentObject private var locationManager: LocationManager
@@ -119,50 +221,25 @@ struct HomeView: View {
                     }
                 } // AsyncImage
                 
-                VStack(spacing: 15) {
-                    if isExpanded {
-                        plantCareButton(
-                            isWatering: $isUpdating,
-                            currentCareType: $currentCareType,
-                            careType: .prune,
-                            imageName: "pruningIcon")
-                        
-                        plantCareButton(
-                            isWatering: $isUpdating,
-                            currentCareType: $currentCareType,
-                            careType: .repot,
-                            imageName: "repotIcon")
-                        
-                        plantCareButton(
-                            isWatering: $isUpdating,
-                            currentCareType: $currentCareType,
-                            careType: .fertilize,
-                            imageName: "soilIcon")
-                        
-                        plantCareButton(
-                            isWatering: $isUpdating,
-                            currentCareType: $currentCareType,
-                            careType: .mist,
-                            imageName: "mistingIcon")
-                        
-                        plantCareButton(
-                            isWatering: $isUpdating,
-                            currentCareType: $currentCareType,
-                            careType: .water,
-                            imageName: "wateringIcon")
-                    }
-                    
-                    Button {
-                        isExpanded.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                            .padding()
-                            .background(Color.red)
-                            .clipShape(Circle())
-                    }
-                    
+                // 🌿 1. THE DIMMING OVERLAY
+                if plantInst.isExpanded {
+                    Color.black
+                        .opacity(0.4) // Adjust opacity for desired dimness (e.g., 0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            // Optional: Tap anywhere on the dimmed area to close the menu
+                            withAnimation(.easeOut(duration: 0.25)) {
+                                plantInst.isExpanded = false
+                            }
+                        }
+                        // Add animation for smooth appearance/disappearance
+                        .transition(.opacity)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+
+                ExpandablePlantCareMenu(isUpdating: $isUpdating, currentCareType: $currentCareType)
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 10)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 
                 
             }
